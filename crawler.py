@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+from linebot.models import TextSendMessage
+
 def card():
     card_dic={}
     header={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
@@ -66,10 +68,11 @@ def card():
     card_dic['聯邦綠卡'].insert(0,'水電/瓦斯/電信/路邊停車')
     card_dic['台新@GoGo卡'].insert(0,'水電/瓦斯/電信')
 
-    def lala():
-        for k in card_dic:
-            print(k)
-            for i in card_dic[k]:
-                print(i)
+    reply_message = ""
+    for k in card_dic:
+        reply_message += k + "\n"
+        for i in card_dic[k]:
+            reply_message += i + "\n"
+        reply_message += "\n"
 
-    return lala()
+    return TextSendMessage(text=reply_message)
