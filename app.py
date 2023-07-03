@@ -1,16 +1,10 @@
 from flask import Flask, request, abort
-
 from linebot import LineBotApi, WebhookHandler
-
 from linebot.exceptions import InvalidSignatureError
-
 from linebot.models import *
 
 #======python的函數庫==========
-import tempfile, os
-import datetime
-import time
-import json
+import os, crawler
 #======python的函數庫==========
 
 app = Flask(__name__)
@@ -20,34 +14,38 @@ line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 # Channel Secret
 handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 
+# 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
-def callback():
+def callback(event):
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
     # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
-    
+    # handle webhook body
     try:
-        json_data = json.loads(body)  # json 格式化收到的訊息
-        tk = json_data['events'][0]['replyToken']  # 取得 reply token
-        tp = json_data['events'][0]['message']['type']  # 取得 message 的類型
-        
-        if tp == 'text':
-            msg = json_data['events'][0]['message']['text']  # 取得使用者發送的訊息
-            line_bot_api.reply_message(tk, TextSendMessage(text=msg))
-        elif tp == 'sticker':
-            stickerId = json_data['events'][0]['message']['stickerId']  # 取得 stickerId
-            packageId = json_data['events'][0]['message']['packageId']  # 取得 packageId
-            line_bot_api.reply_message(tk, StickerSendMessage(sticker_id=stickerId, package_id=packageId))
-            
-    except Exception as e:
-        print('error:', e)
+        handler.handle(body, signature)
+    except InvalidSignatureError:
         abort(400)
-    
     return 'OK'
-        
-import os
+
+#receive msg
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event): 
+    # 如果消息已经回复过，则不再回复，直接返回?
+    tp=event.message.type
+    if tp == 'text':
+        msg = event.message.text   # 取得使用者發送的訊息
+        if '繳水電' in msg:
+            reply=crawler.card()
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply))
+        else:
+            line_bot_api.reply_message(event.reply_token,StickerSendMessage(sticker_id=16581263, package_id=8515))
+    else:
+        line_bot_api.reply_message(event.reply_token,StickerSendMessage(sticker_id=10885, package_id=789))
+    return
+
+
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
