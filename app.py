@@ -56,6 +56,37 @@ def receive_msg(request):
     except:
         print('error', body)
     return 'OK'
+def reply_msg(text):
+    # 客製化回覆文字
+    msg_dict = {
+        'hi':'Hi! 你好呀～',
+        'hello':'Hello World!!!!',
+        '你好':'你好呦～',
+        'help':'有什麼要幫忙的嗎？'
+    }
+    # 如果出現特定地點，提供地點資訊
+    local_dict = {
+        '總統府':{
+            'title':'總統府',
+            'address':'100台北市中正區重慶南路一段122號',
+            'latitude':'25.040319874750914',
+            'longitude':'121.51162883484746'
+        }
+    }
+    # 如果出現特定圖片文字，提供圖片網址
+    img_dict = {
+        '皮卡丘':'https://upload.wikimedia.org/wikipedia/en/a/a6/Pok%C3%A9mon_Pikachu_art.png',
+        '傑尼龜':'https://upload.wikimedia.org/wikipedia/en/5/59/Pok%C3%A9mon_Squirtle_art.png'
+    }
+    # 預設回覆的文字就是收到的訊息
+    reply_msg_content = ['text',text]
+    if text in msg_dict:
+        reply_msg_content = ['text',msg_dict[text.lower()]]
+    if text in local_dict:
+        reply_msg_content = ['location',local_dict[text.lower()]]
+    if text in img_dict:
+        reply_msg_content = ['image',img_dict[text.lower()]]
+    return reply_msg_content
         
 import os
 if __name__ == "__main__":
