@@ -30,19 +30,18 @@ def callback():
     return 'OK'
 
 #receive msg
-@handler.add(MessageEvent, message=TextMessage)
+@handler.add(MessageEvent, message=Message)
 def handle_message(event): 
-    # 如果消息已经回复过，则不再回复，直接返回?
     tp=event.message.type
     if tp == 'text':
-        msg = event.message.text   # 取得使用者發送的訊息
+        msg = event.message.text
         if '繳水電' in msg:
-            reply=crawler.card()
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply))
+            reply = crawler.card()
+            line_bot_api.reply_message(event.reply_token, reply)
         else:
-            line_bot_api.reply_message(event.reply_token,StickerSendMessage(sticker_id=16581263, package_id=8515))
+            line_bot_api.reply_message(event.reply_token, StickerSendMessage(sticker_id=16581263, package_id=8515))
     else:
-        line_bot_api.reply_message(event.reply_token,StickerSendMessage(sticker_id=10885, package_id=789))
+        line_bot_api.reply_message(event.reply_token, StickerSendMessage(sticker_id=10885, package_id=789))
     return
 
 
