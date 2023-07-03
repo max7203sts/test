@@ -66,10 +66,10 @@ def card():
     card_dic['聯邦綠卡'].insert(0,'水電/瓦斯/電信/路邊停車')
     card_dic['台新@GoGo卡'].insert(0,'水電/瓦斯/電信')
 
-    for k in card_dic:
-        print(k)
-        for i in card_dic[k]:
-            print(i)
-        print('\n')
-    return 'ok'
-card()
+    def lala():
+        for k in card_dic:
+            print(k)
+            for i in card_dic[k]:
+                print(i)
+            print('\n')
+    return lala()
