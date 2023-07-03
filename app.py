@@ -55,7 +55,7 @@ def receive_msg(request):
             line_bot_api.reply_message(tk,StickerSendMessage(sticker_id=stickerId, package_id=packageId))
     except:
         print('error', body)
-    return
+    return 'OK'
         
 import os
 if __name__ == "__main__":
