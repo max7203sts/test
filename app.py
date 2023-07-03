@@ -30,7 +30,7 @@ def callback():
     return 'OK'
 
 #receive msg
-@handler.add(MessageEvent, message=Message)
+@handler.add(MessageEvent, message=[TextMessage, StickerMessage])
 def handle_message(event): 
     tp=event.message.type
     if tp == 'text':
