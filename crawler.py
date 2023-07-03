@@ -71,5 +71,5 @@ def card():
             print(k)
             for i in card_dic[k]:
                 print(i)
-            print('\n')
+
     return lala()
