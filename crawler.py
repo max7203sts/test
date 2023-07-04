@@ -74,5 +74,6 @@ def card():
         for i in card_dic[k]:
             reply_message += i + "\n"
         reply_message += "\n"
+    reply_message = reply_message.strip()
 
     return TextSendMessage(text=reply_message)
