@@ -38,6 +38,9 @@ def handle_message(event):
         if '繳水電' in msg:
             reply = crawler.card()
             line_bot_api.reply_message(event.reply_token, reply)
+        elif '行動支付' in msg:
+            reply = crawler.payback()
+            line_bot_api.reply_message(event.reply_token, reply)
         else:
             line_bot_api.reply_message(event.reply_token, StickerSendMessage(sticker_id=16581263, package_id=8515))
     else:
